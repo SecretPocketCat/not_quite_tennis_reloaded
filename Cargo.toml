@@ -1,0 +1,60 @@
+[package]
+name = "ranos"
+version = "0.1.0"
+publish = false
+edition = "2021"
+exclude = ["dist", "build", "assets", "credits"]
+
+[profile.dev.package."*"]
+opt-level = 3
+
+[profile.dev]
+opt-level = 1
+
+[profile.release]
+lto = true
+codegen-units = 1
+
+# The profile that 'cargo dist' will build with
+[profile.dist]
+inherits = "release"
+lto = "thin"
+
+[features]
+dev = ["bevy/bevy_dylib"]
+
+# Bevy defaults minus audio and some other things not needed
+# see https://github.com/bevyengine/bevy/blob/main/Cargo.toml#L31-L54
+default = [
+    "bevy/animation",
+    "bevy/bevy_asset",
+    "bevy/bevy_scene",
+    "bevy/bevy_winit",
+    "bevy/bevy_core_pipeline",
+    "bevy/bevy_render",
+    "bevy/bevy_sprite",
+    "bevy/bevy_text",
+    "bevy/bevy_ui",
+    "bevy/png",
+    "bevy/filesystem_watcher",
+]
+
+[dependencies]
+bevy = { version = "0.11.0", default-features = false }
+rand = "0.8.5"
+seldom_fn_plugin = "0.4.0"
+bevy_tweening = { git = "https://github.com/SecretPocketCat/bevy_tweening", rev = "c335a67" }
+serde = "1.0.177"
+leafwing-input-manager = "0.10.0"
+bevy_rapier2d = { version = "0.22.0", features = ["debug-render-2d"] }
+bevy_framepace = "0.13.3"
+bevy_editor_pls = { git = "https://github.com/jakobhellermann/bevy_editor_pls", rev = "f72483a" }
+# bevy_editor_pls = "0.4.0"
+
+# keep the following in sync with Bevy's dependencies
+winit = { version = "0.28", default-features = false }
+image = { version = "0.24", default-features = false }
+
+
+[build-dependencies]
+embed-resource = "1.8.0"
